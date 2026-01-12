@@ -238,7 +238,7 @@ Push 後可在 GitHub → Actions 看到 pipeline 執行結果。
 ---
 
 ## 11. Demo 影片（請在此放連結）
-> 請將你的 demo 影片連結貼在下面（YouTube / Google Drive / OneDrive 皆可）
+
 
 - Demo 影片連結：`（貼上你的影片網址）`
 
