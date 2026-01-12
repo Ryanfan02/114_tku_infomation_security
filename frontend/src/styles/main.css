@@ -1,0 +1,270 @@
+:root {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans";
+
+  --bg: #ffffff;
+  --text: #111111;
+  --card: #ffffff;
+  --border: #dddddd;
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+
+  /* 新增：主色（顏色切換用） */
+  --accent: #2563eb;
+
+  --muted: rgba(0, 0, 0, 0.6);
+  --error: #b00020;
+}
+
+[data-theme="dark"] {
+  --bg: #0b0f14;
+  --text: #e6e6e6;
+  --card: #111827;
+  --border: #2b3440;
+  --input-bg: #0f172a;
+  --input-border: #334155;
+
+  --muted: rgba(255, 255, 255, 0.65);
+  --error: #ff6b6b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* 讓登入/註冊頁置中用 */
+.page-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* 基本 UI */
+.container { max-width: 920px; margin: 0 auto; padding: 16px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.row { display: flex; gap: 12px; flex-wrap: wrap; }
+.stack { display: grid; gap: 12px; }
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+/* 主按鈕：吃 accent */
+.btn {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.small { font-size: 12px; color: var(--muted); }
+.error { color: var(--error); }
+
+/* 登入卡片寬度 */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+}
+.auth-card.register {
+  max-width: 520px;
+}
+
+/* ============ 右上角：主題/顏色/登出 ============ */
+.topRightControls {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 主題按鈕 */
+.theme-btn {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* 顏色點點 */
+.accentRow {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.accentDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+[data-theme="dark"] .accentDot {
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+.accentDot.active {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* ============ Dashboard 行事曆排版（你之前那段保留） ============ */
+.dashTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashLayout {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .dashLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.miniCalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.miniTitle { font-weight: 700; }
+
+.miniBtn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.miniWeekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.miniCell {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.miniCell.muted { opacity: 0.45; }
+
+/* 選取框改吃 accent */
+.miniCell.selected { outline: 2px solid var(--accent); }
+
+.weekHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.weekTitle { font-weight: 800; font-size: 18px; }
+
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.weekCell {
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  min-height: 120px;
+}
+
+/* 選取框改吃 accent */
+.weekCell.selected { outline: 2px solid var(--accent); }
+
+.weekCellTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.weekDow { font-weight: 800; }
+.weekDate { opacity: 0.8; }
+
+.badge {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.eventRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
