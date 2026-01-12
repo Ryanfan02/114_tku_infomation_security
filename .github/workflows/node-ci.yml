@@ -1,0 +1,73 @@
+name: Node CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  backend:
+    name: Backend - audit / lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install
+        run: npm install
+
+      - name: Audit (high)
+        run: npm audit --audit-level=high
+
+      - name: Lint (if script exists)
+        run: |
+          node -e "const s=require('./package.json').scripts||{}; process.exit(s.lint?0:1)"
+        continue-on-error: true
+
+      - name: Run lint
+        if: ${{ success() }}
+        run: npm run lint
+        continue-on-error: true
+
+  frontend:
+    name: Frontend - audit / lint / build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install
+        run: npm install
+
+      - name: Audit (high)
+        run: npm audit --audit-level=high
+
+      - name: Lint (if script exists)
+        run: |
+          node -e "const s=require('./package.json').scripts||{}; process.exit(s.lint?0:1)"
+        continue-on-error: true
+
+      - name: Run lint
+        if: ${{ success() }}
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
