@@ -7,20 +7,20 @@ function hasWhitespace(s: string): boolean {
 function isAlphaNum(ch: string): boolean {
   const code = ch.charCodeAt(0);
 
-  // 0-9
+ 
   if (code >= 48 && code <= 57) return true;
 
-  // A-Z
+
   if (code >= 65 && code <= 90) return true;
 
-  // a-z
+  
   if (code >= 97 && code <= 122) return true;
 
   return false;
 }
 
 function isSymbol(ch: string): boolean {
-  // 特殊符號：不是英數、不是底線、不是空白
+  
   if (ch === "_") return false;
   if (isAlphaNum(ch)) return false;
   if (/\s/.test(ch)) return false;
@@ -32,13 +32,7 @@ function symbolNotAtEdges(s: string): boolean {
   return !isSymbol(s[0]) && !isSymbol(s[s.length - 1]);
 }
 
-/**
- * 帳號規則（你要的）
- * - 只能是 Gmail 或台灣手機號碼
- * - Gmail: xxx@gmail.com 或 xxx@googlemail.com
- * - 手機: 09xxxxxxxx 或 +8869xxxxxxxx 或 8869xxxxxxxx
- * - 不可包含空白
- */
+
 export function validateUsername(username: string): ValidationResult {
   const u = username.trim();
 
@@ -54,14 +48,7 @@ export function validateUsername(username: string): ValidationResult {
   return { ok: false, message: "帳號必須為 Gmail 或台灣手機號碼" };
 }
 
-/**
- * 密碼規則（沿用你原本的要求）
- * - 必須大於 8 碼（>= 9）
- * - 不可包含空白
- * - 必須包含：至少 1 英文字母、1 數字、1 特殊符號
- * - 特殊符號不可放第一個或最後一個位置
- * - 特殊符號：任何非英數、非底線、非空白字元
- */
+
 export function validatePassword(password: string): ValidationResult {
   if (password.length <= 8) {
     return { ok: false, message: "密碼必須大於 8 碼" };
@@ -83,8 +70,8 @@ export function validatePassword(password: string): ValidationResult {
     const ch = password[i];
     const code = ch.charCodeAt(0);
 
-    if (code >= 48 && code <= 57) hasDigit = true; // 0-9
-    if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) hasLetter = true; // A-Z a-z
+    if (code >= 48 && code <= 57) hasDigit = true; 
+    if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) hasLetter = true; 
     if (isSymbol(ch)) hasSym = true;
   }
 
@@ -95,15 +82,7 @@ export function validatePassword(password: string): ValidationResult {
   return { ok: true };
 }
 
-/**
- * 密碼強度分數：0~4
- * - 長度 > 8 先給 1 分
- * - 包含英文字母 +1
- * - 包含數字 +1
- * - 包含特殊符號 +1
- * - 同時有大寫 + 小寫：額外 +1（最多到 4）
- * - 如果特殊符號在頭或尾（理論上 validatePassword 已擋），這裡也會降分
- */
+
 export function passwordStrengthScore(password: string): number {
   let score = 0;
 

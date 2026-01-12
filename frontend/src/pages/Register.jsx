@@ -7,7 +7,7 @@ import { registerApi } from "../api/auth.js";
 export default function Register() {
   const nav = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
@@ -36,10 +36,21 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await registerApi({ username, password });
+      
+      await registerApi({
+        email: username.trim(),
+        password: password,
+        confirmPassword: password2
+      });
+
       nav("/login", { replace: true });
-    } catch {
-      setError("註冊失敗，請稍後再試");
+    } catch (err) {
+ 
+      const msg =
+        err && err.data && err.data.message
+          ? err.data.message
+          : "註冊失敗，請稍後再試";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -57,7 +68,7 @@ export default function Register() {
             className="input"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="帳號"
+            placeholder="帳號（Email）"
             autoComplete="username"
           />
 

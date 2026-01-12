@@ -12,7 +12,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        {/* 右上角：深色/淺色 + 顏色切換 + 登出 */}
+    
         <TopRightControls />
 
         <Routes>

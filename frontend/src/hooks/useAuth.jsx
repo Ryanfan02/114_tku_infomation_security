@@ -1,53 +1,59 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
-import { loadUser, saveUser, clearUser } from "../lib/authStorage.ts";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { loginApi, logoutApi, meApi } from "../api/auth.js";
 
-const AuthContext = createContext(null);
+const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => loadUser());
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  async function login(username, password) {
-    setLoading(true);
+  async function refreshMe() {
     try {
-      await loginApi({ username, password });
-      const me = await meApi(); // 需要後端 /auth/me
-      setUser(me);
-      saveUser(me);
-      return { ok: true };
-    } catch {
-      // 錯誤訊息控管：統一不洩漏帳號是否存在
-      return { ok: false, message: "帳號或密碼錯誤" };
-    } finally {
-      setLoading(false);
+      const data = await meApi(); 
+      setUser(data && data.user ? data.user : null);
+      return data && data.user ? data.user : null;
+    } catch (err) {
+      
+      setUser(null);
+      return null;
     }
   }
 
+  async function login(email, password) {
+    await loginApi({ email, password });   
+    const u = await refreshMe();           
+    return u;
+  }
+
   async function logout() {
-    setLoading(true);
-    try { await logoutApi(); } catch {}
-    setLoading(false);
-    setUser(null);
-    clearUser();
+    try {
+      await logoutApi();
+    } finally {
+      setUser(null);
+    }
   }
 
-  // F3：可用於 token 過期 / 401 時強制登出
-  function forceLogout() {
-    setUser(null);
-    clearUser();
-  }
+  useEffect(() => {
+ 
+    refreshMe().finally(() => setLoading(false));
+  
+  }, []);
 
-  const value = useMemo(
-    () => ({ user, loading, login, logout, forceLogout }),
-    [user, loading]
-  );
+  const value = useMemo(() => {
+    return {
+      user,
+      loading,
+      login,
+      logout,
+      refreshMe
+    };
+  }, [user, loading]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  const ctx = useContext(AuthCtx);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }

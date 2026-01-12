@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.jsx";
+import { Link, useNavigate } from "react-router-dom";
 import { validateUsername, validatePassword } from "../lib/validators.ts";
+import { loginApi } from "../api/auth.js";
 
 export default function Login() {
-  const { login, loading } = useAuth();
   const nav = useNavigate();
-  const loc = useLocation();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -28,14 +27,23 @@ export default function Login() {
       return;
     }
 
-    const result = await login(username, password);
-    if (!result.ok) {
-      setError(result.message || "帳號或密碼錯誤");
-      return;
-    }
+    setLoading(true);
+    try {
+      await loginApi({
+        email: username.trim(),
+        password: password
+      });
 
-    const from = loc.state && loc.state.from ? loc.state.from : "/dashboard";
-    nav(from, { replace: true });
+      nav("/dashboard", { replace: true });
+    } catch (err) {
+      const msg =
+        err && err.data && err.data.message
+          ? err.data.message
+          : "帳號或密碼錯誤";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -50,7 +58,7 @@ export default function Login() {
             className="input"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="帳號"
+            placeholder="帳號（Email）"
             autoComplete="username"
           />
 

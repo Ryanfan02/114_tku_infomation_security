@@ -12,7 +12,7 @@ function addDays(d, n) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 }
 function startOfWeek(d) {
-  // 以週日為一週開始
+
   return new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay());
 }
 

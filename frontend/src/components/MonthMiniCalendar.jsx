@@ -16,7 +16,7 @@ function endOfMonth(d) {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0);
 }
 
-// 0=Sun ... 6=Sat
+
 function startOfCalendarGrid(monthDate) {
   const s = startOfMonth(monthDate);
   const day = s.getDay();
