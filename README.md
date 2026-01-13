@@ -240,7 +240,7 @@ Push 後可在 GitHub → Actions 看到 pipeline 執行結果。
 ## 11. Demo 影片（請在此放連結）
 
 
-- Demo 影片連結：`（貼上你的影片網址）`
+- Demo 影片連結：`https://www.youtube.com/watch?v=5rwOTjNvsXE`
 
 ---
 
